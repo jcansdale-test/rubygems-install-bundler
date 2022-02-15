@@ -1,5 +1,9 @@
 on: [push, repository_dispatch, workflow_dispatch]
 
+env:
+  OWNER: github-packages-examples
+  
+
 jobs:
   bundle-install:
     runs-on: ubuntu-latest
@@ -15,7 +19,7 @@ jobs:
       - name: Add Gemfile
         run: |
           cat > Gemfile << EOM
-          source "https://rubygems.pkg.github.com/${{ github.repository_owner }}" do
+          source "https://rubygems.pkg.github.com/${{ env.OWNER }}" do
             gem "rubygems-publish"
           end
           EOM
@@ -28,7 +32,7 @@ jobs:
           EOM
 
       - name: Authenticate using Bundler
-        run: bundle config https://rubygems.pkg.github.com/${{ github.repository_owner }} token:${{ secrets.GITHUB_TOKEN }}
+        run: bundle config https://rubygems.pkg.github.com/${{ env.OWNER }} token:${{ secrets.GITHUB_TOKEN }}
 
       - name: Install using Bundler
         run: bundle install
@@ -55,7 +59,7 @@ jobs:
           :bulk_threshold: 1000
           :sources:
           - https://rubygems.org/
-          - https://token:${{ secrets.GITHUB_TOKEN }}@rubygems.pkg.github.com/${{ github.repository_owner }}/
+          - https://token:${{ secrets.GITHUB_TOKEN }}@rubygems.pkg.github.com/${{ env.OWNER }}/
           :update_sources: true
           :verbose: true  
           EOM
