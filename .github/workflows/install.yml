@@ -2,19 +2,23 @@ on: [push, repository_dispatch, workflow_dispatch]
 
 env:
   OWNER: github-packages-examples
-  
 
 jobs:
   bundle-install:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: [2.6.x]    
+
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Ruby 2.6
+      - name: Setup Ruby ${{ matrix.ruby-version }}
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.6.x
+          ruby-version: ${{ matrix.ruby-version }}
 
       - name: Add Gemfile
         run: |
