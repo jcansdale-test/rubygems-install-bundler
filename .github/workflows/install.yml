@@ -20,6 +20,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
 
+      - run: bundle version
+
       - name: Add Gemfile
         run: |
           cat > Gemfile << EOM
